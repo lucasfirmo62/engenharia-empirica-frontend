@@ -1,31 +1,58 @@
-import React from "react";
+import React, { useState } from "react";
 
-import { Form, Radio, Button } from 'antd';
+import axios from 'axios';
+
+import { Form, Radio, Button, Select, Input, Typography } from 'antd';
+
+const { Option } = Select;
 
 const moods = [
     "Interessado",
     "Angustiado",
     "Animado",
     "Chateado",
-    "Strong",
-    "Guilty",
-    "Scared",
-    "Hostile",
-    "Enthusiastic",
-    "Proud",
-    "Irritable",
-    "Alert",
-    "Ashamed",
-    "Inspired",
-    "Nervous",
-    "Determined",
-    "Attentive",
-    "Jittery",
-    "Active",
-    "Afraid",
-]
+    "Fortalecido",
+    "Culpado",
+    "Assustado",
+    "Hostil",
+    "Entusiasmado",
+    "Orgulhoso",
+    "Irritável",
+    "Alerta",
+    "Envergonhado",
+    "Inspirado",
+    "Nervoso",
+    "Determinado",
+    "Atento",
+    "Agitado",
+    "Ativo",
+    "Com Medo"
+];
 
 const Survey = () => {
+    const [movies, setMovies] = useState([]);
+    const [selectedMovie, setSelectedMovie] = useState(null);
+    const [showMovieSelection, setShowMovieSelection] = useState(false);
+
+    const handleSearch = async (value) => {
+        const response = await axios.get(
+            `https://api.themoviedb.org/3/search/movie?api_key=${process.env.REACT_APP_TMDB_API_KEY}&query=${value}`
+        );
+        const results = response.data.results;
+        if (results.length > 0) {
+            setMovies(results);
+
+            setShowMovieSelection(true);
+        } else {
+            setMovies(null);
+
+            setShowMovieSelection(false);
+        }
+    };
+
+    const handleSelectMovie = (value, option) => {
+        setSelectedMovie(option.data);
+    };
 
     const onFinish = (values) => {
         console.log('Success:', values);
@@ -43,11 +70,12 @@ const Survey = () => {
                     labelCol={{
                         span: 8,
                     }}
-                    wrapperCol={{
-                        span: 16,
-                    }}
                     style={{
                         maxWidth: 600,
+                        backgroundColor: "#FFFFFF",
+                        padding: 16,
+                        margin: 8,
+                        width: "100%"
                     }}
                     initialValues={{
                         remember: true,
@@ -56,8 +84,47 @@ const Survey = () => {
                     onFinishFailed={onFinishFailed}
                     autoComplete="off"
                 >
+                    <Form.Item
+                        label="Pesquisar filme"
+                        name="movie"
+                        style={{ width: '100%' }}
+                    >
+                        <Input.Search onSearch={handleSearch} enterButton />
+                    </Form.Item>
 
-                    {/* Criar campo para selecionar o filme */}
+                    <Form.Item
+                        label="Filme selecionado"
+                        name="selectedMovie"
+                        style={{ width: '100%' }}
+                        hidden={!showMovieSelection}
+                    >
+                        <Select
+                            showSearch
+                            onSelect={handleSelectMovie}
+                            placeholder="Selecione um filme"
+                        >
+                            {movies.map((movie) => (
+                                <Option key={movie.id} value={movie.title} data={movie}>
+                                    {movie.title}
+                                </Option>
+                            ))}
+                        </Select>
+                    </Form.Item>
+
+                    {selectedMovie && (
+                        <div style={{ borderRadius: 8, display: 'flex', alignItems: 'center', backgroundColor: "green", padding: 8 }}>
+                            <img
+                                src={`https://image.tmdb.org/t/p/w300${selectedMovie.poster_path}`}
+                                alt={selectedMovie.title}
+                                style={{ borderRadius: 8, marginRight: 16, width: 40, marginRight: 16 }}
+                            />
+                            <h3 style={{ color: "white" }}>{selectedMovie.title}</h3>
+                        </div>
+                    )}
+
+                    <Typography.Title level={2}>
+                        Análise do Humor com PANAS
+                    </Typography.Title>
 
                     {moods?.map((mood) =>
                         <Form.Item label={mood}>
@@ -72,13 +139,14 @@ const Survey = () => {
                     )}
 
                     <Form.Item
-                        wrapperCol={{
-                            offset: 8,
-                            span: 16,
-                        }}
+                        style={{ width: '100%' }}
                     >
-                        <Button type="primary" htmlType="submit">
-                            Finalizar Pesquisa
+                        <Button
+                            type="primary"
+                            htmlType="submit"
+                            style={{ backgroundColor: "#398541" }}
+                        >
+                            Finalizar Pesquisa 1/2
                         </Button>
                     </Form.Item>
                 </Form>
