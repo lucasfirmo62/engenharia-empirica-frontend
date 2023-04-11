@@ -4,6 +4,10 @@ import axios from 'axios';
 
 import { Form, Radio, Button, Select, Input, Typography } from 'antd';
 
+import api from '../../api';
+
+import { useNavigate } from 'react-router-dom';
+
 const { Option } = Select;
 
 const moods = [
@@ -29,7 +33,35 @@ const moods = [
     "Com Medo"
 ];
 
+function getGenres(genreIds) {
+    const genreMap = {
+        28: 'Ação',
+        12: 'Aventura',
+        16: 'Animação',
+        35: 'Comédia',
+        80: 'Crime',
+        99: 'Documentário',
+        18: 'Drama',
+        10751: 'Família',
+        14: 'Fantasia',
+        36: 'História',
+        27: 'Terror',
+        10402: 'Música',
+        9648: 'Mistério',
+        10749: 'Romance',
+        878: 'Ficção Científica',
+        10770: 'Cinema TV',
+        53: 'Thriller',
+        10752: 'Guerra',
+        37: 'Faroeste'
+    }
+
+    return genreIds.map(id => genreMap[id]);
+}
+
 const Survey = () => {
+    const navigate = useNavigate();
+
     const [movies, setMovies] = useState([]);
     const [selectedMovie, setSelectedMovie] = useState(null);
     const [showMovieSelection, setShowMovieSelection] = useState(false);
@@ -54,8 +86,55 @@ const Survey = () => {
         setSelectedMovie(option.data);
     };
 
-    const onFinish = (values) => {
-        console.log('Success:', values);
+    const onFinish = async (values) => {
+        const genres = getGenres(selectedMovie.genre_ids);
+        
+        const response = await fetch(`https://api.themoviedb.org/3/movie/${selectedMovie.id}?api_key=${process.env.REACT_APP_TMDB_API_KEY}`);
+        const data_movie = await response.json();
+        const runtime = data_movie.runtime;
+
+        const currentDate = new Date();
+
+        const data = {
+            userId: "6435e5d94d8b8662ce2b8157",
+            surveyDate: currentDate,
+            popularity: selectedMovie.popularity,
+            movieGenre: genres,
+            movieRating: selectedMovie.vote_average,
+            runtime: runtime,
+            positiveAffectBefore: {
+                interested: values.interessado,
+                distressed: values.angustiado,
+                excited: values.animado,
+                upset: values.chateado,
+                strong: values.forte,
+                guilty: values.culpado,
+                scared: values.assustado,
+                hostile: values.hostil,
+                enthusiastic: values.entusiasmado,
+                proud: values.orgulhoso,            
+            },
+            negativeAffectBefore: {
+                irritable: values.irritado,
+                alert: values.alerta,
+                ashamed:  values.envergonhado,
+                inspired:  values.inspirado,
+                nervous: values.nervoso,
+                determined: values.determinado,
+                attentive: values.atento,
+                jittery: values.agitado,
+                active: values.ativo,
+                afraid: values.com_medo
+            }
+        }
+
+        api.post('/survey', data)
+            .then(response => {
+                navigate('/home');
+            })
+            .catch(error => {
+                console.log(error);
+            });
     };
 
     const onFinishFailed = (errorInfo) => {
@@ -88,6 +167,12 @@ const Survey = () => {
                         label="Pesquisar filme"
                         name="movie"
                         style={{ width: '100%' }}
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Por favor, selecione um filme!',
+                            },
+                        ]}
                     >
                         <Input.Search onSearch={handleSearch} enterButton />
                     </Form.Item>
@@ -97,6 +182,12 @@ const Survey = () => {
                         name="selectedMovie"
                         style={{ width: '100%' }}
                         hidden={!showMovieSelection}
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Por favor, selecione um filme!',
+                            },
+                        ]}
                     >
                         <Select
                             showSearch
@@ -116,7 +207,7 @@ const Survey = () => {
                             <img
                                 src={`https://image.tmdb.org/t/p/w300${selectedMovie.poster_path}`}
                                 alt={selectedMovie.title}
-                                style={{ borderRadius: 8, marginRight: 16, width: 40, marginRight: 16 }}
+                                style={{ borderRadius: 8, width: 40, marginRight: 16 }}
                             />
                             <h3 style={{ color: "white" }}>{selectedMovie.title}</h3>
                         </div>
@@ -127,7 +218,16 @@ const Survey = () => {
                     </Typography.Title>
 
                     {moods?.map((mood) =>
-                        <Form.Item label={mood}>
+                        <Form.Item
+                            label={mood}
+                            name={mood === 'Com Medo' ? 'com_medo' : mood}
+                            rules={[
+                                {
+                                    required: true,
+                                    message: 'Por favor, selecione um valor!',
+                                },
+                            ]}
+                        >
                             <Radio.Group>
                                 <Radio value="1">1</Radio>
                                 <Radio value="2">2</Radio>

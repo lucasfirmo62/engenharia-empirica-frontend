@@ -1,10 +1,15 @@
 import React from "react";
 
+import { useNavigate } from 'react-router-dom';
+
 import { Button, Form, Select, DatePicker, Input } from 'antd';
+
+import api from '../../api';
 
 const { Option } = Select;
 
 const SignUp = () => {
+    const navigate = useNavigate();
 
     const onGenderChange = (value) => {
         switch (value) {
@@ -22,7 +27,13 @@ const SignUp = () => {
     };
 
     const onFinish = (values) => {
-        console.log('Success:', values);
+        api.post('/signup', values)
+            .then(response => {
+                navigate('/login');
+            })
+            .catch(error => {
+                console.log(error);
+            });
     };
 
     const onFinishFailed = (errorInfo) => {
@@ -37,11 +48,18 @@ const SignUp = () => {
                     labelCol={{
                         span: 8,
                     }}
-                    wrapperCol={{
-                        span: 16,
-                    }}
                     style={{
                         maxWidth: 600,
+                        borderRadius: 32,
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        backgroundColor: "#FFFFFF",
+                        padding: 64,
+                        margin: 32,
+                        width: "100%",
+                        border: "none"
                     }}
                     initialValues={{
                         remember: true,
@@ -52,7 +70,8 @@ const SignUp = () => {
                 >
                     <Form.Item
                         label="Nome de Usuário"
-                        name="nome de usuário"
+                        name="username"
+                        style={{ width: '100%', textAlign: 'left' }}
                         rules={[
                             {
                                 required: true,
@@ -64,8 +83,23 @@ const SignUp = () => {
                     </Form.Item>
 
                     <Form.Item
+                        label="Email"
+                        name="email"
+                        style={{ width: '100%', textAlign: 'left' }}
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Por favor, escreva seu email!',
+                            },
+                        ]}
+                    >
+                        <Input />
+                    </Form.Item>
+
+                    <Form.Item
                         name="gender"
-                        label="Gender"
+                        label="Genêro"
+                        style={{ width: '100%', textAlign: 'left' }}
                         rules={[
                             {
                                 required: true,
@@ -73,7 +107,7 @@ const SignUp = () => {
                         ]}
                     >
                         <Select
-                            placeholder="Select a option and change input text above"
+                            placeholder="Selecione uma opção de genêro"
                             onChange={onGenderChange}
                             allowClear
                         >
@@ -86,12 +120,14 @@ const SignUp = () => {
 
                     <Form.Item
                         noStyle
+                        style={{ width: '100%', textAlign: 'left' }}
                         shouldUpdate={(prevValues, currentValues) => prevValues.gender !== currentValues.gender}
                     >
                         {({ getFieldValue }) =>
                             getFieldValue('gender') === 'other' ? (
                                 <Form.Item
                                     name="gênero"
+                                    style={{ width: '100%', textAlign: 'left' }}
                                     label="Identifique seu gênero"
                                     rules={[
                                         {
@@ -107,7 +143,8 @@ const SignUp = () => {
 
                     <Form.Item
                         label="Senha"
-                        name="senha"
+                        name="password"
+                        style={{ width: '100%', textAlign: 'left' }}
                         rules={[
                             {
                                 required: true,
@@ -122,6 +159,7 @@ const SignUp = () => {
                         name="confirmar"
                         label="Confirmar Senha"
                         dependencies={['password']}
+                        style={{ width: '100%', textAlign: 'left' }}
                         hasFeedback
                         rules={[
                             {
@@ -141,17 +179,20 @@ const SignUp = () => {
                         <Input.Password />
                     </Form.Item>
 
-                    <Form.Item label="Data de Nascimento">
+                    <Form.Item
+                        style={{ width: '100%', textAlign: 'left' }}
+                        name="birthDate"
+                        label="Data de Nascimento"
+                    >
                         <DatePicker />
                     </Form.Item>
 
                     <Form.Item
-                        wrapperCol={{
-                            offset: 8,
-                            span: 16,
-                        }}
+                        style={{ width: '100%' }}
                     >
-                        <Button type="primary" htmlType="submit">
+                        <Button
+                            type="primary" htmlType="submit"
+                        >
                             Cadastrar-se
                         </Button>
                     </Form.Item>
