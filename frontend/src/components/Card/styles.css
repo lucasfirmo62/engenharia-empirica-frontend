@@ -1,0 +1,116 @@
+.card-title{
+    display: flex;
+    padding: 5px;
+    background-color: white;
+    width: 95%;
+    border-radius: 4px;
+}
+
+.poster-img{
+    padding: 10px;
+    width: 140px;
+    border-radius: 13px;
+}
+
+.title-movie{
+    color: rgb(0, 0, 0);
+    font-size: 20px;
+    font-weight: bold;
+}
+
+li{
+    display: block;
+}
+
+.status-finished{
+    margin-left: auto; 
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-top: auto;
+    padding-left: 10px;
+    padding-right: 10px;
+    border-radius: 4px;
+    font-weight: bold;
+    color: white;
+    background-color: #228254;
+    display: flex;
+}
+
+.status-inProgress{
+    margin-left: auto; 
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-top: auto;
+    padding-left: 10px;
+    padding-right: 10px;
+    border-radius: 4px;
+    font-weight: bold;
+    color: white;
+    background-color: #A61616;
+    cursor: pointer;
+    display: flex;
+}
+
+.status-inProgress:hover{
+    background-color: #c91e1e;
+}
+
+.icon{
+    font-size: 30px;
+    margin-top: 10px;
+    padding-right: 5px;
+}
+
+@media only screen and (max-width: 600px) {
+    .card-title{
+        display: block;
+        padding: 5px;
+        background-color: white;
+        width: 100%;
+        border-radius: 4px;
+    }
+    
+    .poster-img{
+        padding: 10px;
+        width: 230px;
+        border-radius: 13px;
+    }
+    
+    .title-movie{
+        color: rgb(0, 0, 0);
+        font-size: 20px;
+        font-weight: bold;
+    }
+    
+    li{
+        display: block;
+    }
+    
+    .status-finished{
+        margin-left: auto; 
+        margin-right: 0;
+        margin-bottom: 0;
+        margin-top: auto;
+        padding:10px;
+        border-radius: 4px;
+        font-weight: bold;
+        color: white;
+        background-color: #228254;
+    }
+    
+    .status-inProgress{
+        margin-left: auto; 
+        margin-right: 0;
+        margin-bottom: 0;
+        margin-top: auto;
+        padding:10px;
+        font-weight: bold;
+        color: white;
+        background-color: #A61616;
+        cursor: pointer;
+    }
+    
+    .status-inProgress:hover{
+        background-color: #c91e1e;
+    }
+  }
