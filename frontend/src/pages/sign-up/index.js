@@ -4,12 +4,22 @@ import { useNavigate } from 'react-router-dom';
 
 import { Button, Form, Select, DatePicker, Input } from 'antd';
 
+import { Link } from "react-router-dom";
+
 import api from '../../api';
+
+import { Navigate } from "react-router-dom";
 
 const { Option } = Select;
 
 const SignUp = () => {
     const navigate = useNavigate();
+
+    const isLoggedIn = localStorage.getItem('token');
+
+    if (isLoggedIn) {
+        return <Navigate to="/" />;
+    }
 
     const onGenderChange = (value) => {
         switch (value) {
@@ -196,6 +206,10 @@ const SignUp = () => {
                             Cadastrar-se
                         </Button>
                     </Form.Item>
+
+                    <div className="space-input">
+                        <p>Já tem uma conta? <Link to="/login">Entrar aqui!</Link></p>        
+                    </div>
                 </Form>
             </center>
         </>

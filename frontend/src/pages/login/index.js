@@ -3,10 +3,32 @@ import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { Button, Form, Input } from 'antd';
 import './styles.css'
 
+import { useNavigate } from 'react-router-dom';
+
+import { Navigate } from "react-router-dom";
+
+import api from '../../api';
+
 const Login = () => {
 
+    const navigate = useNavigate();
+
+    const isLoggedIn = localStorage.getItem('token');
+
+    if (isLoggedIn) {
+        return <Navigate to="/" />;
+    }
+
     const onFinish = (values) => {
-        console.log('Received values of form: ', values);
+        api.post('/login', values)
+            .then(response => {
+                localStorage.setItem('id', response.data.id);
+                localStorage.setItem('token', response.data.token);
+                navigate('/');
+            })
+            .catch(error => {
+                console.log(error);
+            });
     };
 
     return (
@@ -20,22 +42,22 @@ const Login = () => {
                 onFinish={onFinish}
             >
                 <Form.Item
-                    name="Nome de Usuário"
+                    name="email"
                     rules={[
                         {
                             required: true,
-                            message: 'Please input your Username!',
+                            message: 'Por favor, insira seu email!',
                         },
                     ]}
                 >
                     <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Nome de Usuário" />
                 </Form.Item>
                 <Form.Item
-                    name="Senha"
+                    name="password"
                     rules={[
                         {
                             required: true,
-                            message: 'Please input your Password!',
+                            message: 'Por favor, insira sua senha!',
                         },
                     ]}
                 >

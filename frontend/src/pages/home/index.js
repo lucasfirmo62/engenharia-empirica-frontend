@@ -33,9 +33,9 @@ const Home = () => {
 
   return (
     <div className='content'>
-      <div className='header-content' onClick={goTo}>
+      <div className='header-content'>
         <p className='user'>{user.name_user}</p>
-        <div className='add-movie'><AiOutlinePlus className='icon-add'/><p>Adicionar Filme</p></div>
+        <div className='add-movie' onClick={goTo}><AiOutlinePlus className='icon-add'/><p>Adicionar Pesquisa</p></div>
       </div>
       <div className='list'>
         <ul>

@@ -87,6 +87,8 @@ const Survey = () => {
     };
 
     const onFinish = async (values) => {
+
+        const id = localStorage.getItem('id');
         const genres = getGenres(selectedMovie.genre_ids);
         
         const response = await fetch(`https://api.themoviedb.org/3/movie/${selectedMovie.id}?api_key=${process.env.REACT_APP_TMDB_API_KEY}`);
@@ -96,7 +98,7 @@ const Survey = () => {
         const currentDate = new Date();
 
         const data = {
-            userId: "6435e5d94d8b8662ce2b8157",
+            userId: id,
             surveyDate: currentDate,
             popularity: selectedMovie.popularity,
             movieGenre: genres,
@@ -128,9 +130,15 @@ const Survey = () => {
             }
         }
 
-        api.post('/survey', data)
+        console.log(localStorage.getItem('token'))
+
+        api.post('/survey', data, {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem('token')}`,
+            },
+          })
             .then(response => {
-                navigate('/home');
+                navigate('/');
             })
             .catch(error => {
                 console.log(error);
