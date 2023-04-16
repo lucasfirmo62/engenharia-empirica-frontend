@@ -9,25 +9,33 @@ import api from '../../api';
 
 const Home = () => {
 
-  const [movies, setMovies] = useState([]);
+  const [survey, setSurvey] = useState([]);
   const [user, setUser] = useState([]);
 
   useEffect(() => {
-    fetch(`https://api.npoint.io/abb1d797d98f26a45a6c`)
-      .then(response => response.json())
-      .then(json => json.movies)
-      .then(async (data) => {
-        setMovies(await data);
+    async function get_survey() {
+      const id = localStorage.getItem('id');
+
+      await api.get(`/survey/${id}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
       })
+
+        .then(response => { setSurvey(response.data) })
+    }
+
+    get_survey()
   }, [])
 
+  console.log(survey)
   useEffect(() => {
-    fetch(`https://api.npoint.io/abb1d797d98f26a45a6c`)
-      .then(response => response.json())
-      .then(json => json)
-      .then(async (data) => {
-        setUser(await data);
-      })
+    // fetch(`https://api.npoint.io/abb1d797d98f26a45a6c`)
+    // .then(response => response.json())
+    // .then(json => json)
+    // .then(async (data) => {
+    // setUser(await data);
+    // })
   }, [])
 
   function goTo() {
@@ -56,18 +64,19 @@ const Home = () => {
     <div className='content'>
       <div className='header-content'>
         <p className='user'>{user.name_user}</p>
-        <Button style={{backgroundColor: 'red', marginLeft: '16px', marginRight: '16px'}} onClick={handleLogout} type="primary" htmlType="submit" className="login-form-button">
+        <Button style={{ backgroundColor: 'red', marginLeft: '16px', marginRight: '16px' }} onClick={handleLogout} type="primary" htmlType="submit" className="login-form-button">
           Sair
         </Button>
         <div className='add-movie' onClick={goTo}><AiOutlinePlus className='icon-add' /><p>Adicionar Pesquisa</p></div>
       </div>
       <div className='list'>
         <ul>
-          {movies.map((movie, index) => (
+          {survey.map((survey, index) => (
             <li key={index}>
               <Card
-                id={movie.id}
-                status={movie.status}
+                id={survey._id}
+                movieId={survey.movieId}
+                status={survey.surveyStep == "1" ? "inProgress" : "finished"}
               />
             </li>
           ))}

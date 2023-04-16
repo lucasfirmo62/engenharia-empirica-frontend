@@ -3,18 +3,18 @@ import './styles.css'
 import { MdOutlineTaskAlt } from 'react-icons/md';
 import { RxEnter } from 'react-icons/rx';
 
-const CardTitle = ({id, status}) => {
+const CardTitle = ({id, movieId, status}) => {
 
     const [movie, setMovie] = useState([]);
 
     useEffect(() => {
-        fetch(`https://api.themoviedb.org/3/movie/${id}?api_key=${process.env.REACT_APP_API_KEY}&language=pt-BR`)
+        fetch(`https://api.themoviedb.org/3/movie/${movieId}?api_key=${process.env.REACT_APP_TMDB_API_KEY}&language=pt-BR`)
           .then(response => response.json())
           .then(json => json)
           .then(async (data) => {
             setMovie(await data);
           })
-      }, [id])
+    }, [id])
 
 
       function goTo(){
