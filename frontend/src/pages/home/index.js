@@ -20,22 +20,24 @@ const Home = () => {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
-      })
-
-        .then(response => { setSurvey(response.data) })
+      }).then(response => { setSurvey(response.data) })
     }
 
     get_survey()
   }, [])
 
-  console.log(survey)
   useEffect(() => {
-    // fetch(`https://api.npoint.io/abb1d797d98f26a45a6c`)
-    // .then(response => response.json())
-    // .then(json => json)
-    // .then(async (data) => {
-    // setUser(await data);
-    // })
+    async function get_user() {
+      const id = localStorage.getItem('id');
+      await api.get(`/user/${id}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+      })
+      .then(response => { setUser(response.data) })
+    }
+
+    get_user()
   }, [])
 
   function goTo() {
@@ -63,7 +65,7 @@ const Home = () => {
   return (
     <div className='content'>
       <div className='header-content'>
-        <p className='user'>{user.name_user}</p>
+        <p className='user'>{user.username}</p>
         <Button style={{ backgroundColor: 'red', marginLeft: '16px', marginRight: '16px' }} onClick={handleLogout} type="primary" htmlType="submit" className="login-form-button">
           Sair
         </Button>
