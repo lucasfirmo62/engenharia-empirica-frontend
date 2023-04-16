@@ -1,7 +1,11 @@
 import React from "react";
 
+import api from "../../api";
 
 import { Form, Radio, Button, Typography } from 'antd';
+
+import { useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 const moods = [
     "Interessado",
@@ -26,10 +30,51 @@ const moods = [
     "Com Medo"
 ];
 
-// passar o id do Survey por props
-const SurveyAfter = (props) => {
-    const onFinish = async (values) => {
-        
+const SurveyAfter = () => {
+    const navigate = useNavigate();
+
+    const survey_id = useParams()
+
+    const onFinish = async (values) => {      
+        const data = {
+            positiveAffectAfter: {
+                interested: values.interessado,
+                distressed: values.angustiado,
+                excited: values.animado,
+                upset: values.chateado,
+                strong: values.forte,
+                guilty: values.culpado,
+                scared: values.assustado,
+                hostile: values.hostil,
+                enthusiastic: values.entusiasmado,
+                proud: values.orgulhoso,
+            },
+            negativeAffectAfter: {
+                irritable: values.irritado,
+                alert: values.alerta,
+                ashamed: values.envergonhado,
+                inspired: values.inspirado,
+                nervous: values.nervoso,
+                determined: values.determinado,
+                attentive: values.atento,
+                jittery: values.agitado,
+                active: values.ativo,
+                afraid: values.com_medo
+            },
+            surveyStep: "2"
+        }
+
+        api.patch(`/survey/${survey_id.id}`, data, {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`,
+            },
+        })
+            .then(response => {
+                navigate('/');
+            })
+            .catch(error => {
+                console.log(error);
+            });
     };
 
     const onFinishFailed = (errorInfo) => {
@@ -66,7 +111,7 @@ const SurveyAfter = (props) => {
                     {moods?.map((mood) =>
                         <Form.Item
                             label={mood}
-                            name={mood === 'Com Medo' ? 'com_medo' : mood}
+                            name={mood === 'Com Medo' ? 'com_medo' : mood.toLowerCase()}
                             rules={[
                                 {
                                     required: true,
