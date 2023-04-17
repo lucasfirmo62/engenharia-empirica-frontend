@@ -13,15 +13,15 @@ const { Option } = Select;
 const moods = [
     "Interessado",
     "Angustiado",
-    "Animado",
+    "animado",
     "Chateado",
-    "Fortalecido",
+    "Forte",
     "Culpado",
     "Assustado",
     "Hostil",
     "Entusiasmado",
     "Orgulhoso",
-    "Irritável",
+    "Irritado",
     "Alerta",
     "Envergonhado",
     "Inspirado",
@@ -68,12 +68,13 @@ const Survey = () => {
 
     const handleSearch = async (value) => {
         const response = await axios.get(
-            `https://api.themoviedb.org/3/search/movie?api_key=${process.env.REACT_APP_TMDB_API_KEY}&query=${value}`
+            `https://api.themoviedb.org/3/search/movie?api_key=${process.env.REACT_APP_TMDB_API_KEY}&query=${value}&language=pt-BR`
         );
         const results = response.data.results;
+
         if (results.length > 0) {
             setMovies(results);
-
+            console.log(results)
             setShowMovieSelection(true);
         } else {
             setMovies(null);
@@ -87,16 +88,21 @@ const Survey = () => {
     };
 
     const onFinish = async (values) => {
+
+        const id = localStorage.getItem('id');
         const genres = getGenres(selectedMovie.genre_ids);
-        
+
         const response = await fetch(`https://api.themoviedb.org/3/movie/${selectedMovie.id}?api_key=${process.env.REACT_APP_TMDB_API_KEY}`);
         const data_movie = await response.json();
         const runtime = data_movie.runtime;
 
         const currentDate = new Date();
+        console.log()
 
         const data = {
-            userId: "6435e5d94d8b8662ce2b8157",
+            userId: id,
+            movieId: selectedMovie.id,
+            movieName: selectedMovie.original_title,
             surveyDate: currentDate,
             popularity: selectedMovie.popularity,
             movieGenre: genres,
@@ -112,13 +118,13 @@ const Survey = () => {
                 scared: values.assustado,
                 hostile: values.hostil,
                 enthusiastic: values.entusiasmado,
-                proud: values.orgulhoso,            
+                proud: values.orgulhoso,
             },
             negativeAffectBefore: {
                 irritable: values.irritado,
                 alert: values.alerta,
-                ashamed:  values.envergonhado,
-                inspired:  values.inspirado,
+                ashamed: values.envergonhado,
+                inspired: values.inspirado,
                 nervous: values.nervoso,
                 determined: values.determinado,
                 attentive: values.atento,
@@ -128,9 +134,13 @@ const Survey = () => {
             }
         }
 
-        api.post('/survey', data)
+        api.post('/survey', data, {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`,
+            },
+        })
             .then(response => {
-                navigate('/home');
+                navigate('/');
             })
             .catch(error => {
                 console.log(error);
@@ -189,13 +199,9 @@ const Survey = () => {
                             },
                         ]}
                     >
-                        <Select
-                            showSearch
-                            onSelect={handleSelectMovie}
-                            placeholder="Selecione um filme"
-                        >
+                        <Select showSearch onSelect={handleSelectMovie} placeholder="Selecione um filme">
                             {movies.map((movie) => (
-                                <Option key={movie.id} value={movie.title} data={movie}>
+                                <Option key={movie.id} value={movie.id} data={movie}>
                                     {movie.title}
                                 </Option>
                             ))}
@@ -219,8 +225,9 @@ const Survey = () => {
 
                     {moods?.map((mood) =>
                         <Form.Item
+                            key={mood}
                             label={mood}
-                            name={mood === 'Com Medo' ? 'com_medo' : mood}
+                            name={mood === 'Com Medo' ? 'com_medo' : mood.toLowerCase()}
                             rules={[
                                 {
                                     required: true,
