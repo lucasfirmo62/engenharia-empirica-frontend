@@ -219,7 +219,7 @@ const SignUp = () => {
                         <Button type="primary" htmlType="submit" className="login-form-button">
                         Cadastrar-se
                         </Button>
-                        ou <a href="/login">Entrar aqui</a>
+                        <a style={{marginLeft: 12}} href="/login">Entrar aqui</a>
                     </Form.Item>
 
                 </Form>

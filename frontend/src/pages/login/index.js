@@ -89,7 +89,7 @@ const Login = () => {
                     <Button type="primary" htmlType="submit" className="login-form-button">
                         Entrar
                     </Button>
-                    ou <a href="/sign-up">Registre-se</a>
+                    <a style={{marginLeft: 12}} href="/sign-up">Registre-se</a>
                 </Form.Item>
             </Form>
         </div>
