@@ -8,6 +8,8 @@ import { Form, Radio, Button, Typography } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 
+import { notification } from 'antd';
+
 const moods = [
     { type: "Interessado", description: "Curioso e interessado em algo." },
     { type: "Angustiado", description: "Sofrendo com ansiedade ou aflição." },
@@ -73,6 +75,10 @@ const SurveyAfter = () => {
         })
             .then(response => {
                 navigate('/');
+                notification.success({
+                    message: 'Pesquisa finalizada com sucesso',
+                    duration: 2,
+                });
             })
             .catch(error => {
                 console.log(error);

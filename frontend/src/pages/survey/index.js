@@ -8,6 +8,8 @@ import axios from 'axios';
 import { Form, Radio, Button, Select, Input, Typography, Divider, Avatar } from 'antd';
 import debounce from 'lodash/debounce';
 
+import { notification } from 'antd';
+
 import api from '../../api';
 
 import { useNavigate } from 'react-router-dom';
@@ -148,6 +150,10 @@ const Survey = () => {
         })
             .then(response => {
                 navigate('/');
+                notification.success({
+                    message: 'Pesquisa adicionada com sucesso',
+                    duration: 2,
+                });
             })
             .catch(error => {
                 console.log(error);

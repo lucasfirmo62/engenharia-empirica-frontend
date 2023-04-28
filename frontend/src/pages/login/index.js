@@ -1,6 +1,7 @@
 import React from "react";
 import { LockOutlined, MailOutlined } from '@ant-design/icons';
 import { Button, Form, Input } from 'antd';
+import { message } from 'antd';
 import './styles.css'
 
 import { useNavigate } from 'react-router-dom';
@@ -28,6 +29,7 @@ const Login = () => {
             })
             .catch(error => {
                 console.log(error);
+                message.error('Ocorreu um erro ao fazer o login.');
             });
     };
 
