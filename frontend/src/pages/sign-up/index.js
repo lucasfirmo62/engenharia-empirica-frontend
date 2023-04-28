@@ -4,6 +4,8 @@ import { useNavigate } from 'react-router-dom';
 
 import { Button, Form, Select, DatePicker, Input } from 'antd';
 
+import { MailOutlined, UserOutlined, LockOutlined, CalendarOutlined, genderless } from '@ant-design/icons';
+
 import { Link } from "react-router-dom";
 
 import api from '../../api';
@@ -52,22 +54,16 @@ const SignUp = () => {
 
     return (
         <>
-            <center>
+            <div className="content-login">
                 <Form
                     name="basic"
-                    labelCol={{
-                        span: 8,
-                    }}
+    
                     style={{
                         maxWidth: 600,
-                        borderRadius: 32,
                         display: 'flex',
                         flexDirection: 'column',
                         alignItems: 'center',
                         justifyContent: 'center',
-                        backgroundColor: "#FFFFFF",
-                        padding: 64,
-                        margin: 32,
                         width: "100%",
                         border: "none"
                     }}
@@ -79,21 +75,23 @@ const SignUp = () => {
                     autoComplete="off"
                 >
                     <Form.Item
-                        label="Nome de Usuário"
                         name="username"
                         style={{ width: '100%', textAlign: 'left' }}
                         rules={[
                             {
                                 required: true,
-                                message: 'Please input your username!',
+                                message: 'Por favor, coloque seu username!',
                             },
                         ]}
                     >
-                        <Input />
+                        <Input 
+                            placeholder="Nome de Usuário"
+                            prefix={<UserOutlined />}
+                            type="text"
+                        />
                     </Form.Item>
 
                     <Form.Item
-                        label="Email"
                         name="email"
                         style={{ width: '100%', textAlign: 'left' }}
                         rules={[
@@ -103,16 +101,20 @@ const SignUp = () => {
                             },
                         ]}
                     >
-                        <Input />
+                        <Input 
+                            placeholder="Email"
+                            prefix={<MailOutlined />}
+                            type="email"
+                        />
                     </Form.Item>
 
                     <Form.Item
                         name="gender"
-                        label="Genêro"
                         style={{ width: '100%', textAlign: 'left' }}
                         rules={[
                             {
                                 required: true,
+                                message: 'Por favor, coloque seu gênero!',
                             },
                         ]}
                     >
@@ -138,36 +140,38 @@ const SignUp = () => {
                                 <Form.Item
                                     name="gênero"
                                     style={{ width: '100%', textAlign: 'left' }}
-                                    label="Identifique seu gênero"
                                     rules={[
                                         {
                                             required: false,
                                         },
                                     ]}
                                 >
-                                    <Input />
+                                    <Input 
+                                        placeholder="Digite seu gênero"
+                                    />
                                 </Form.Item>
                             ) : null
                         }
                     </Form.Item>
 
                     <Form.Item
-                        label="Senha"
                         name="password"
                         style={{ width: '100%', textAlign: 'left' }}
                         rules={[
                             {
                                 required: true,
-                                message: 'Please input your password!',
+                                message: 'Por favor, coloque sua senha!',
                             },
                         ]}
                     >
-                        <Input.Password />
+                        <Input.Password 
+                            placeholder="Senha"
+                            prefix={<LockOutlined />}
+                        />
                     </Form.Item>
 
                     <Form.Item
                         name="confirmar"
-                        label="Confirmar Senha"
                         dependencies={['password']}
                         style={{ width: '100%', textAlign: 'left' }}
                         hasFeedback
@@ -186,32 +190,40 @@ const SignUp = () => {
                             }),
                         ]}
                     >
-                        <Input.Password />
-                    </Form.Item>
-
-                    <Form.Item
-                        style={{ width: '100%', textAlign: 'left' }}
-                        name="birthDate"
-                        label="Data de Nascimento"
-                    >
-                        <DatePicker />
+                        <Input.Password 
+                            placeholder="Senha"
+                            prefix={<LockOutlined />}
+                        />
                     </Form.Item>
 
                     <Form.Item
                         style={{ width: '100%' }}
+                        name="birthDate"
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Por favor, coloque sua data de nascimento!',
+                            },
+                        ]}
                     >
-                        <Button
-                            type="primary" htmlType="submit"
-                        >
-                            Cadastrar-se
-                        </Button>
+                        <DatePicker 
+                            style={{ width: '100%' }}
+                            placeholder="Data de Nascimento"
+                            prefix={<CalendarOutlined />}
+                        />
                     </Form.Item>
 
-                    <div className="space-input">
-                        <p>Já tem uma conta? <Link to="/login">Entrar aqui!</Link></p>        
-                    </div>
+                    <Form.Item
+                        style={{ width: '100%', textAlign: 'left'}}
+                    >
+                        <Button type="primary" htmlType="submit" className="login-form-button">
+                        Cadastrar-se
+                        </Button>
+                        ou <a href="/login">Entrar aqui</a>
+                    </Form.Item>
+
                 </Form>
-            </center>
+            </div>
         </>
     )
 }

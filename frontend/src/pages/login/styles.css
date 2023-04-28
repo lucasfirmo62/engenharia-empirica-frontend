@@ -19,6 +19,15 @@
     min-width: 300px;
     padding-left: 30%;
     padding-right: 30%;
+    height: 50vh;
+    display: flex;
+    align-items: center; 
+}
+
+@media (max-width: 1024px) {
+    .content-login {
+        height: 80vh;
+    }
 }
 
 @media (max-width: 600px) {

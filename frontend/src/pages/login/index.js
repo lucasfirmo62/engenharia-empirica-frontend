@@ -1,5 +1,5 @@
 import React from "react";
-import { LockOutlined, UserOutlined } from '@ant-design/icons';
+import { LockOutlined, MailOutlined } from '@ant-design/icons';
 import { Button, Form, Input } from 'antd';
 import './styles.css'
 
@@ -39,10 +39,20 @@ const Login = () => {
                 initialValues={{
                     remember: true,
                 }}
+                style={{
+                    maxWidth: 600,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    width: "100%",
+                    border: "none"
+                }}
                 onFinish={onFinish}
             >
                 <Form.Item
                     name="email"
+                    style={{ width: '100%', textAlign: 'left' }}
                     rules={[
                         {
                             required: true,
@@ -50,10 +60,14 @@ const Login = () => {
                         },
                     ]}
                 >
-                    <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Nome de Usuário" />
+                    <Input 
+                        prefix={<MailOutlined />}
+                        placeholder="Email" 
+                    />
                 </Form.Item>
                 <Form.Item
                     name="password"
+                    style={{ width: '100%', textAlign: 'left' }}
                     rules={[
                         {
                             required: true,
@@ -69,7 +83,9 @@ const Login = () => {
                 </Form.Item>
 
 
-                <Form.Item>
+                <Form.Item
+                    style={{ width: '100%', textAlign: 'left'}}
+                >
                     <Button type="primary" htmlType="submit" className="login-form-button">
                         Entrar
                     </Button>
