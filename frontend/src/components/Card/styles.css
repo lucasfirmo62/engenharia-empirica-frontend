@@ -44,7 +44,7 @@ li {
 }
 
 .status-inProgress {
-    margin-left: auto;
+    margin-left: 0;
     margin-right: 0;
     margin-bottom: 0;
     margin-top: auto;
@@ -120,10 +120,12 @@ li {
         margin-bottom: 0;
         margin-top: auto;
         padding: 10px;
+        border-radius: 4px;
         font-weight: bold;
         color: white;
         background-color: #A61616;
         cursor: pointer;
+        margin: auto;
     }
 
     .status-inProgress:hover {

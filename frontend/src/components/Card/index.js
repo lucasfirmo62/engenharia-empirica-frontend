@@ -68,12 +68,12 @@ const CardTitle = ({ id, movieId, status }) => {
       <div className='card-right-block'>
         <Button
           className='button-delete'
-          style={{ marginBotton: '16px', backgroundColor: 'red', marginLeft: '16px', marginRight: '16px' }}
+          style={{ marginBotton: '16px', backgroundColor: 'red' }}
           type="primary"
           onClick={() => setShowConfirmModal(true)}
           icon={<AiOutlineCloseCircle />}
         >
-          {isSmallScreen ? <span>Apagar Pesquisa</span> : true}
+          {isSmallScreen ? <span style={{paddingLeft: 4}}>Apagar Pesquisa</span> : true}
         </Button>
         <Modal
           title="Confirmação de exclusão"

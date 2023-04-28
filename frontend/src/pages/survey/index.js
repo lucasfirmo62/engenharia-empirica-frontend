@@ -1,8 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
+
+import QuestionCard from "../../components/QuestionCard";
+import './styles.css'
 
 import axios from 'axios';
 
-import { Form, Radio, Button, Select, Input, Typography } from 'antd';
+import { Form, Radio, Button, Select, Input, Typography, Divider, Avatar } from 'antd';
+import debounce from 'lodash/debounce';
 
 import api from '../../api';
 
@@ -10,27 +14,28 @@ import { useNavigate } from 'react-router-dom';
 
 const { Option } = Select;
 
+
 const moods = [
-    "Interessado",
-    "Angustiado",
-    "animado",
-    "Chateado",
-    "Forte",
-    "Culpado",
-    "Assustado",
-    "Hostil",
-    "Entusiasmado",
-    "Orgulhoso",
-    "Irritado",
-    "Alerta",
-    "Envergonhado",
-    "Inspirado",
-    "Nervoso",
-    "Determinado",
-    "Atento",
-    "Agitado",
-    "Ativo",
-    "Com Medo"
+    { type: "Interessado", description: "Curioso e interessado em algo." },
+    { type: "Angustiado", description: "Sofrendo com ansiedade ou aflição." },
+    { type: "Animado", description: "Alegre e entusiasmado com algo." },
+    { type: "Chateado", description: "Triste ou irritado com algo." },
+    { type: "Forte", description: "Sentindo-se confiante e capaz." },
+    { type: "Culpado", description: "Sentindo-se responsável por algo negativo." },
+    { type: "Assustado", description: "Com medo ou apreensivo com algo." },
+    { type: "Hostil", description: "Sentindo raiva ou hostilidade." },
+    { type: "Entusiasmado", description: "Muito animado com algo." },
+    { type: "Orgulhoso", description: "Sentindo-se orgulhoso de si mesmo." },
+    { type: "Irritado", description: "Com raiva ou aborrecido com algo." },
+    { type: "Alerta", description: "Atento e alerta a alguma situação." },
+    { type: "Envergonhado", description: "Sentindo vergonha ou constrangimento." },
+    { type: "Inspirado", description: "Sentindo-se inspirado por algo." },
+    { type: "Nervoso", description: "Ansioso ou preocupado com algo." },
+    { type: "Determinado", description: "Com um forte desejo de alcançar um objetivo." },
+    { type: "Atento", description: "Concentrado e atento a algo." },
+    { type: "Agitado", description: "Inquieto e agitado." },
+    { type: "Ativo", description: "Sentindo-se energizado e ativo." },
+    { type: "Com Medo", description: "Sentindo medo ou apreensão." }
 ];
 
 function getGenres(genreIds) {
@@ -64,24 +69,26 @@ const Survey = () => {
 
     const [movies, setMovies] = useState([]);
     const [selectedMovie, setSelectedMovie] = useState(null);
+    const [selectKey, setSelectKey] = useState(0);
     const [showMovieSelection, setShowMovieSelection] = useState(false);
 
-    const handleSearch = async (value) => {
-        const response = await axios.get(
-            `https://api.themoviedb.org/3/search/movie?api_key=${process.env.REACT_APP_TMDB_API_KEY}&query=${value}&language=pt-BR`
-        );
-        const results = response.data.results;
+    const debouncedSearch = useRef(
+        debounce(async (value) => {
+            if (value.length > 0) {
+                const response = await axios.get(
+                    `https://api.themoviedb.org/3/search/movie?api_key=${process.env.REACT_APP_TMDB_API_KEY}&query=${value}&language=pt-BR`
+                );
+                const results = response.data.results;
+                setMovies(results);
+                setShowMovieSelection(results.length > 0);
+            } else {
+                setMovies([]);
+                setShowMovieSelection(false);
+            }
+        }, 300)
+    ).current;
 
-        if (results.length > 0) {
-            setMovies(results);
-            console.log(results)
-            setShowMovieSelection(true);
-        } else {
-            setMovies(null);
-
-            setShowMovieSelection(false);
-        }
-    };
+    // const debouncedSearch = useRef(debounce(handleSearch, 300, { leading: true })).current;
 
     const handleSelectMovie = (value, option) => {
         setSelectedMovie(option.data);
@@ -153,18 +160,17 @@ const Survey = () => {
 
     return (
         <>
-            <center>
+            <div className="content-survey">
                 <Form
                     name="basic"
                     labelCol={{
                         span: 8,
                     }}
                     style={{
-                        maxWidth: 600,
-                        backgroundColor: "#FFFFFF",
-                        padding: 16,
-                        margin: 8,
-                        width: "100%"
+                        maxWidth: '1080px',
+                        alignItems: 'center',
+                        width: "100%",
+                        border: "none",
                     }}
                     initialValues={{
                         remember: true,
@@ -173,25 +179,10 @@ const Survey = () => {
                     onFinishFailed={onFinishFailed}
                     autoComplete="off"
                 >
-                    <Form.Item
-                        label="Pesquisar filme"
-                        name="movie"
-                        style={{ width: '100%' }}
-                        rules={[
-                            {
-                                required: true,
-                                message: 'Por favor, selecione um filme!',
-                            },
-                        ]}
-                    >
-                        <Input.Search onSearch={handleSearch} enterButton />
-                    </Form.Item>
 
                     <Form.Item
-                        label="Filme selecionado"
                         name="selectedMovie"
                         style={{ width: '100%' }}
-                        hidden={!showMovieSelection}
                         rules={[
                             {
                                 required: true,
@@ -199,11 +190,22 @@ const Survey = () => {
                             },
                         ]}
                     >
-                        <Select showSearch onSelect={handleSelectMovie} placeholder="Selecione um filme">
+                        <Select
+                            key={selectKey}
+                            allowClear
+                            showSearch
+                            onSearch={debouncedSearch}
+                            onSelect={(value, option) => {
+                                const [id, title] = value.split('-');
+                                setSelectedMovie({ id, title, ...option.data });
+                            }}
+                            value={selectedMovie?.title}
+                            placeholder="Selecione um filme"
+                        >
                             {movies.map((movie) => (
-                                <Option key={movie.id} value={movie.id} data={movie}>
+                                <Select.Option key={movie.id} value={`${movie.id}-${movie.title}`} data={movie}>
                                     {movie.title}
-                                </Option>
+                                </Select.Option>
                             ))}
                         </Select>
                     </Form.Item>
@@ -218,6 +220,57 @@ const Survey = () => {
                             <h3 style={{ color: "white" }}>{selectedMovie.title}</h3>
                         </div>
                     )}
+
+                    {moods?.map((mood) =>
+                        <QuestionCard 
+                            mood={mood}
+                        />
+                    )}
+
+                    <Form.Item
+                        style={{ display: "flex", justifyContent: "center" }}
+                    >
+                        <Button
+                            type="primary"
+                            htmlType="submit"
+                            style={{ backgroundColor: "#398541", width: "100%", marginTop: 16 }}
+                        >
+                            Finalizar Pesquisa 1/2
+                        </Button>
+                    </Form.Item>
+                </Form>
+            </div>
+        </>
+    )
+}
+
+export default Survey;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{/* <center>
+
+
+                    
 
                     <Typography.Title level={2}>
                         Análise do Humor com PANAS
@@ -245,21 +298,6 @@ const Survey = () => {
                         </Form.Item>
                     )}
 
-                    <Form.Item
-                        style={{ width: '100%' }}
-                    >
-                        <Button
-                            type="primary"
-                            htmlType="submit"
-                            style={{ backgroundColor: "#398541" }}
-                        >
-                            Finalizar Pesquisa 1/2
-                        </Button>
-                    </Form.Item>
+                   
                 </Form>
-            </center>
-        </>
-    )
-}
-
-export default Survey;
+            </center> */}

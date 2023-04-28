@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import './styles.css'
 import Card from '../../components/Card'
-import { AiOutlinePlus } from 'react-icons/ai';
 
 import { Button } from 'antd';
+
+import { PlusOutlined } from '@ant-design/icons';
 
 import api from '../../api';
 
@@ -34,7 +35,7 @@ const Home = () => {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
       })
-      .then(response => { setUser(response.data) })
+        .then(response => { setUser(response.data) })
     }
 
     get_user()
@@ -65,11 +66,15 @@ const Home = () => {
   return (
     <div className='content'>
       <div className='header-content'>
-        <p className='user'>{user.username}</p>
-        <Button style={{ backgroundColor: 'red', marginLeft: '16px', marginRight: '16px' }} onClick={handleLogout} type="primary" htmlType="submit" className="login-form-button">
-          Sair
+        <div className='header-primary'>
+          <p className='user'>{user.username}</p>
+          <Button className="exit" style={{ marginLeft: 8, fontWeight: "bold", backgroundColor: 'red' }} onClick={handleLogout} type="primary" htmlType="submit">
+            Sair
+          </Button>
+        </div>
+        <Button onClick={goTo} className="add-movie" style={{ alignItems: "center", color:"#FFF" }}>
+          <PlusOutlined /> Adicionar Pesquisa
         </Button>
-        <div className='add-movie' onClick={goTo}><AiOutlinePlus className='icon-add' /><p>Adicionar Pesquisa</p></div>
       </div>
       <div className='list'>
         <ul>

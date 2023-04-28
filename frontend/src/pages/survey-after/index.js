@@ -1,6 +1,7 @@
 import React from "react";
 
 import api from "../../api";
+import QuestionCard from "../../components/QuestionCard";
 
 import { Form, Radio, Button, Typography } from 'antd';
 
@@ -8,34 +9,35 @@ import { useNavigate } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 
 const moods = [
-    "Interessado",
-    "Angustiado",
-    "Animado",
-    "Chateado",
-    "Fortalecido",
-    "Culpado",
-    "Assustado",
-    "Hostil",
-    "Entusiasmado",
-    "Orgulhoso",
-    "Irritável",
-    "Alerta",
-    "Envergonhado",
-    "Inspirado",
-    "Nervoso",
-    "Determinado",
-    "Atento",
-    "Agitado",
-    "Ativo",
-    "Com Medo"
+    { type: "Interessado", description: "Curioso e interessado em algo." },
+    { type: "Angustiado", description: "Sofrendo com ansiedade ou aflição." },
+    { type: "Animado", description: "Alegre e entusiasmado com algo." },
+    { type: "Chateado", description: "Triste ou irritado com algo." },
+    { type: "Forte", description: "Sentindo-se confiante e capaz." },
+    { type: "Culpado", description: "Sentindo-se responsável por algo negativo." },
+    { type: "Assustado", description: "Com medo ou apreensivo com algo." },
+    { type: "Hostil", description: "Sentindo raiva ou hostilidade." },
+    { type: "Entusiasmado", description: "Muito animado com algo." },
+    { type: "Orgulhoso", description: "Sentindo-se orgulhoso de si mesmo." },
+    { type: "Irritado", description: "Com raiva ou aborrecido com algo." },
+    { type: "Alerta", description: "Atento e alerta a alguma situação." },
+    { type: "Envergonhado", description: "Sentindo vergonha ou constrangimento." },
+    { type: "Inspirado", description: "Sentindo-se inspirado por algo." },
+    { type: "Nervoso", description: "Ansioso ou preocupado com algo." },
+    { type: "Determinado", description: "Com um forte desejo de alcançar um objetivo." },
+    { type: "Atento", description: "Concentrado e atento a algo." },
+    { type: "Agitado", description: "Inquieto e agitado." },
+    { type: "Ativo", description: "Sentindo-se energizado e ativo." },
+    { type: "Com Medo", description: "Sentindo medo ou apreensão." }
 ];
+
 
 const SurveyAfter = () => {
     const navigate = useNavigate();
 
     const survey_id = useParams()
 
-    const onFinish = async (values) => {      
+    const onFinish = async (values) => {
         const data = {
             positiveAffectAfter: {
                 interested: values.interessado,
@@ -84,18 +86,17 @@ const SurveyAfter = () => {
     return (
         <>
 
-            <center>
+            <div className="content-survey">
                 <Form
                     name="basic"
                     labelCol={{
                         span: 8,
                     }}
                     style={{
-                        maxWidth: 600,
-                        backgroundColor: "#FFFFFF",
-                        padding: 16,
-                        margin: 8,
-                        width: "100%"
+                        maxWidth: '1080px',
+                        alignItems: 'center',
+                        width: "100%",
+                        border: "none",
                     }}
                     initialValues={{
                         remember: true,
@@ -104,44 +105,26 @@ const SurveyAfter = () => {
                     onFinishFailed={onFinishFailed}
                     autoComplete="off"
                 >
-                    <Typography.Title level={2}>
-                        Análise do Humor com PANAS
-                    </Typography.Title>
-
                     {moods?.map((mood) =>
-                        <Form.Item
-                            label={mood}
-                            name={mood === 'Com Medo' ? 'com_medo' : mood.toLowerCase()}
-                            rules={[
-                                {
-                                    required: true,
-                                    message: 'Por favor, selecione um valor!',
-                                },
-                            ]}
-                        >
-                            <Radio.Group>
-                                <Radio value="1">1</Radio>
-                                <Radio value="2">2</Radio>
-                                <Radio value="3">3</Radio>
-                                <Radio value="4">4</Radio>
-                                <Radio value="5">5</Radio>
-                            </Radio.Group>
-                        </Form.Item>
+                        <QuestionCard
+                            mood={mood}
+                        />
                     )}
 
+
                     <Form.Item
-                        style={{ width: '100%' }}
+                        style={{ display: "flex", justifyContent: "center" }}
                     >
                         <Button
                             type="primary"
                             htmlType="submit"
-                            style={{ backgroundColor: "#398541" }}
+                            style={{ backgroundColor: "#398541", width: "100%", marginTop: 16 }}
                         >
                             Finalizar Pesquisa 2/2
                         </Button>
                     </Form.Item>
                 </Form>
-            </center>
+            </div>
         </>
     )
 }

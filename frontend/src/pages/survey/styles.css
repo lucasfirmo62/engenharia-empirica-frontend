@@ -1,0 +1,17 @@
+.content-survey {
+    padding-top: 10%;
+    margin: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50%;
+}
+
+@media (max-width: 600px) {
+    .content-survey {
+        padding-top: 10%;
+        width: 90%;
+        padding-left: 3%;
+        padding-right: 3%;
+    }
+}
