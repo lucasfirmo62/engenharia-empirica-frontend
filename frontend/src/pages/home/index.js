@@ -3,17 +3,20 @@ import './styles.css'
 import Card from '../../components/Card'
 
 import { Button } from 'antd';
-import { Modal } from 'antd';
+import { Modal, Typography } from 'antd';
 
-import { PlusOutlined } from '@ant-design/icons';
+import { PlusOutlined, QuestionCircleOutlined } from '@ant-design/icons';
+
 
 import api from '../../api';
 
 const Home = () => {
+  const { Title, Paragraph } = Typography;
 
   const [survey, setSurvey] = useState([]);
   const [user, setUser] = useState([]);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
+  const [showHelpModal, setShowHelpModal] = useState(false);
 
   useEffect(() => {
     async function get_survey() {
@@ -66,7 +69,7 @@ const Home = () => {
         console.error('Error logging out:', err);
       });
 
-      setShowLogoutModal(false)
+    setShowLogoutModal(false)
   };
 
   return (
@@ -78,6 +81,9 @@ const Home = () => {
             Sair
           </Button>
         </div>
+        <Button type="link" onClick={() => setShowHelpModal(true)} icon={<QuestionCircleOutlined />}>
+          Ajuda
+        </Button>
         <Button onClick={goTo} className="add-movie" style={{ alignItems: "center", color: "#FFF" }}>
           <PlusOutlined /> Adicionar Pesquisa
         </Button>
@@ -102,6 +108,23 @@ const Home = () => {
         onCancel={() => setShowLogoutModal(false)}
       >
         <p>Deseja realmente sair?</p>
+      </Modal>
+      <Modal
+        title="Como Funciona a Pesquisa?"
+        open={showHelpModal}
+        onCancel={() => setShowHelpModal(false)}
+        footer={[    <Button key="close" onClick={() => setShowHelpModal(false)}> Ok </Button>  ]}
+      >
+        <Typography>
+          <Title level={4}>Responda a Pesquisa e Assista ao Filme</Title>
+          <Paragraph>
+            Primeiro, você deverá responder à primeira parte da pesquisa. Depois, assista ao filme indicado na primeira parte da pesquisa.
+          </Paragraph>
+          <Title level={4}>Complete a Pesquisa</Title>
+          <Paragraph>
+            Após assistir ao filme, você deverá continuar e concluir a pesquisa.
+          </Paragraph>
+        </Typography>
       </Modal>
     </div>
   )

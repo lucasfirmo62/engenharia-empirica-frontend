@@ -4,6 +4,7 @@ import { MdOutlineTaskAlt } from 'react-icons/md';
 import { RxEnter } from 'react-icons/rx';
 
 import { AiOutlineCloseCircle } from 'react-icons/ai';
+import { DeleteOutlined } from '@ant-design/icons';
 
 import { Button, Modal } from 'antd';
 
@@ -68,10 +69,10 @@ const CardTitle = ({ id, movieId, status }) => {
       <div className='card-right-block'>
         <Button
           className='button-delete'
-          style={{ marginBotton: '16px', backgroundColor: 'red' }}
-          type="primary"
+          style={{ fontWeight: "bold", color: "#FFF", marginBotton: '16px', backgroundColor: 'red' }}
+          type="danger"
           onClick={() => setShowConfirmModal(true)}
-          icon={<AiOutlineCloseCircle />}
+          icon={<DeleteOutlined />}
         >
           {isSmallScreen ? <span style={{paddingLeft: 4}}>Apagar Pesquisa</span> : true}
         </Button>
