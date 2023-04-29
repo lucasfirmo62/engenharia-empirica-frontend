@@ -4,6 +4,7 @@
     background-color: white;
     width: 95%;
     border-radius: 4px;
+    justify-content: space-between;
 }
 
 .poster-img {
@@ -16,6 +17,8 @@
     color: rgb(0, 0, 0);
     font-size: 20px;
     font-weight: bold;
+    margin-left: 10px; 
+    margin-right: auto;
 }
 
 li {
@@ -23,7 +26,7 @@ li {
 }
 
 .card-right-block {
-    width: 100%;
+    width: max-content;
     display: flex;
     flex-direction: column;
     align-items: end;
@@ -95,6 +98,7 @@ li {
 
     .card-right-block {
         align-items: center;
+        width: 100%;
     }
 
     .card-title .button-delete {
