@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 
 import api from "../../api";
 import QuestionCard from "../../components/QuestionCard";
@@ -35,11 +35,15 @@ const moods = [
 
 
 const SurveyAfter = () => {
+    const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+
     const navigate = useNavigate();
 
     const survey_id = useParams()
 
     const onFinish = async (values) => {
+        setIsButtonDisabled(true)
+
         const data = {
             positiveAffectAfter: {
                 interested: values.interessado,
@@ -124,6 +128,7 @@ const SurveyAfter = () => {
                         <Button
                             type="primary"
                             htmlType="submit"
+                            disabled={isButtonDisabled}
                             style={{ backgroundColor: "#398541", width: "100%", marginTop: 16 }}
                         >
                             Finalizar Pesquisa 2/2

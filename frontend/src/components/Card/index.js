@@ -17,8 +17,11 @@ const CardTitle = ({ id, movieId, status }) => {
 
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [isSmallScreen, setIsSmallScreen] = useState(false);
+  const [isButtonDeleteDisabled, setIsButtonDeleteDisabled] = useState(false);
 
   const handleDeleteSurvey = async () => {
+    setIsButtonDeleteDisabled(true)
+
     async function delete_survey() {
       await api.delete(`/survey/${id}`, {
         headers: {
@@ -72,6 +75,7 @@ const CardTitle = ({ id, movieId, status }) => {
           style={{ fontWeight: "bold", color: "#FFF", marginBotton: '16px', backgroundColor: 'red' }}
           type="danger"
           onClick={() => setShowConfirmModal(true)}
+          disabled={isButtonDeleteDisabled}
           icon={<DeleteOutlined />}
         >
           {isSmallScreen ? <span style={{paddingLeft: 4}}>Apagar Pesquisa</span> : true}

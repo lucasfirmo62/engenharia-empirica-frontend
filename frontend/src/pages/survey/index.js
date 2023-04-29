@@ -73,6 +73,7 @@ const Survey = () => {
     const [selectedMovie, setSelectedMovie] = useState(null);
     const [selectKey, setSelectKey] = useState(0);
     const [showMovieSelection, setShowMovieSelection] = useState(false);
+    const [isButtonDisabled, setIsButtonDisabled] = useState(false);
 
     const debouncedSearch = useRef(
         debounce(async (value) => {
@@ -97,6 +98,7 @@ const Survey = () => {
     };
 
     const onFinish = async (values) => {
+        setIsButtonDisabled(true)
 
         const id = localStorage.getItem('id');
         const genres = getGenres(selectedMovie.genre_ids);
@@ -239,6 +241,7 @@ const Survey = () => {
                         <Button
                             type="primary"
                             htmlType="submit"
+                            disabled={isButtonDisabled}
                             style={{ backgroundColor: "#398541", width: "100%", marginTop: 16 }}
                         >
                             Finalizar Pesquisa 1/2
@@ -251,59 +254,3 @@ const Survey = () => {
 }
 
 export default Survey;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-{/* <center>
-
-
-                    
-
-                    <Typography.Title level={2}>
-                        Análise do Humor com PANAS
-                    </Typography.Title>
-
-                    {moods?.map((mood) =>
-                        <Form.Item
-                            key={mood}
-                            label={mood}
-                            name={mood === 'Com Medo' ? 'com_medo' : mood.toLowerCase()}
-                            rules={[
-                                {
-                                    required: true,
-                                    message: 'Por favor, selecione um valor!',
-                                },
-                            ]}
-                        >
-                            <Radio.Group>
-                                <Radio value="1">1</Radio>
-                                <Radio value="2">2</Radio>
-                                <Radio value="3">3</Radio>
-                                <Radio value="4">4</Radio>
-                                <Radio value="5">5</Radio>
-                            </Radio.Group>
-                        </Form.Item>
-                    )}
-
-                   
-                </Form>
-            </center> */}
