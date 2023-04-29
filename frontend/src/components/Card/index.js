@@ -28,13 +28,15 @@ const CardTitle = ({ id, movieId, status }) => {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
       })
-      .then(response => { console.log("pesquisa deletada") })
+      .then(response => { 
+        console.log("pesquisa deletada") 
+        window.location.reload()
+      })
     }
 
     delete_survey()
 
     setShowConfirmModal(false)
-    window.location.reload()
   };
 
   const [movie, setMovie] = useState([]);
