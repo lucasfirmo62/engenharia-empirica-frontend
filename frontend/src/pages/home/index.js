@@ -77,14 +77,14 @@ const Home = () => {
       <div className='header-content'>
         <div className='header-primary'>
           <p className='user'>{user.username}</p>
-          <Button className="exit" style={{ marginLeft: 8, fontWeight: "bold", backgroundColor: 'red' }} onClick={() => setShowLogoutModal(true)} type="primary" htmlType="submit">
+          <Button className="exit" style={{ marginLeft: 8, fontWeight: "bold", backgroundColor: 'red' }} onClick={() => setShowLogoutModal(true)} onTouchStart={() => setShowLogoutModal(true)} type="primary" htmlType="submit">
             Sair
           </Button>
         </div>
-        <Button type="link" onClick={() => setShowHelpModal(true)} icon={<QuestionCircleOutlined />}>
+        <Button type="link" onClick={() => setShowHelpModal(true)} onTouchStart={() => setShowHelpModal(true)} icon={<QuestionCircleOutlined />}>
           Ajuda
         </Button>
-        <Button onClick={goTo} className="add-movie" style={{ alignItems: "center", color: "#FFF" }}>
+        <Button onClick={goTo} onTouchStart={goTo} className="add-movie" style={{ alignItems: "center", color: "#FFF" }}>
           <PlusOutlined /> Adicionar Pesquisa
         </Button>
       </div>
@@ -113,7 +113,7 @@ const Home = () => {
         title="Como Funciona a Pesquisa?"
         open={showHelpModal}
         onCancel={() => setShowHelpModal(false)}
-        footer={[    <Button key="close" onClick={() => setShowHelpModal(false)}> Ok </Button>  ]}
+        footer={[    <Button key="close" onClick={() => setShowHelpModal(false)} onTouchStart={() => setShowHelpModal(false)}> Ok </Button>  ]}
       >
         <Typography>
           <Title level={4}>Responda a Pesquisa e Assista ao Filme</Title>

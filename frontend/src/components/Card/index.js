@@ -77,6 +77,7 @@ const CardTitle = ({ id, movieId, status }) => {
           style={{ fontWeight: "bold", color: "#FFF", marginBotton: '16px', backgroundColor: 'red' }}
           type="danger"
           onClick={() => setShowConfirmModal(true)}
+          onTouchStart={() => setShowConfirmModal(true)}
           disabled={isButtonDeleteDisabled}
           icon={<DeleteOutlined />}
         >
@@ -95,7 +96,7 @@ const CardTitle = ({ id, movieId, status }) => {
             <MdOutlineTaskAlt className='icon' /><p>Pesquisa Finalizada 2/2</p>
           </div>
           :
-          <div className='status-inProgress' onClick={goTo}>
+          <div className='status-inProgress' onClick={goTo} onTouchStart={goTo}>
             <RxEnter className='icon' /><p>Continuar Pesquisa 1/2</p>
           </div>
 
